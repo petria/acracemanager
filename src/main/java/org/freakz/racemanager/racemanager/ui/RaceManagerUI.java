@@ -15,11 +15,14 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import lombok.extern.slf4j.Slf4j;
+import org.freakz.racemanager.racemanager.events.PushEvent;
 import org.freakz.racemanager.racemanager.ui.view.StartServerView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Theme("valo")
 @Push
+@Slf4j
 @SpringUI
 @SpringViewDisplay
 public class RaceManagerUI extends UI implements ViewDisplay, Broadcaster.BroadcastListener {
@@ -71,15 +74,25 @@ public class RaceManagerUI extends UI implements ViewDisplay, Broadcaster.Broadc
     }
 
     @Override
-    public void receiveBroadcast(final String message) {
+    public void receiveBroadcast(final PushEvent event) {
         access(() -> {
-
-            final View currentView = getNavigator().getCurrentView();
-            if (currentView instanceof StartServerView) {
-                StartServerView startServerView = (StartServerView) currentView;
-                startServerView.addLine(message);
+            switch (event.getType()) {
+                case SERVER_CONSOLE_LOG:
+                    handleServerLogEvent(event);
+                    break;
+                default:
+                    log.error("Not implemented: {}", event.getType());
             }
         });
+    }
+
+    private void handleServerLogEvent(PushEvent event) {
+        final View currentView = getNavigator().getCurrentView();
+        if (currentView instanceof StartServerView) {
+            StartServerView startServerView = (StartServerView) currentView;
+            startServerView.addLine(event.getMessage());
+        }
+
     }
 
 }

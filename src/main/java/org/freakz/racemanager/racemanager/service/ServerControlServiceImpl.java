@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.freakz.racemanager.racemanager.events.PushEvent.getServerConsoleLogEvent;
 
 @Service
 @Slf4j
 public class ServerControlServiceImpl implements ServerControlService {
 
-//    @Autowired
-//    private MyUI myUI;
     private Timer timer = new Timer();
     private ProcessRunner runner;
 
@@ -27,7 +26,7 @@ public class ServerControlServiceImpl implements ServerControlService {
     }
 
     private void handleTimer() {
-        log.debug("Timer!");
+        //        log.debug("Timer!");
         //        Broadcaster.broadcast(new Date().toString());
         timer.schedule(new MyTimer(), 5000L);
         if (runner != null) {
@@ -38,7 +37,7 @@ public class ServerControlServiceImpl implements ServerControlService {
 
     @Override
     public void lineAddedToStdout(String line) {
-        Broadcaster.broadcast(line);
+        Broadcaster.broadcast(getServerConsoleLogEvent(line, "id"));
     }
 
     public ServerControlServiceImpl() {

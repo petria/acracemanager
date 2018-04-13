@@ -25,6 +25,7 @@ public class StartServerView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
+
         addComponent(new Label("Server control panel"));
 
         HorizontalLayout buttons = new HorizontalLayout();
