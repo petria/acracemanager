@@ -4,6 +4,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
@@ -25,21 +26,28 @@ public class StartServerView extends VerticalLayout implements View {
     @PostConstruct
     void init() {
         addComponent(new Label("Server control panel"));
+
+        HorizontalLayout buttons = new HorizontalLayout();
+
         Button startButton = new Button("Start server");
         startButton.addClickListener(this::handleStart);
-        addComponent(startButton);
 
         Button stopButton = new Button("Stop server");
         stopButton.addClickListener(this::handleStop);
-        addComponent(stopButton);
 
         Button clearServerLog = new Button("Clear log");
         clearServerLog.addClickListener(this::handleClearLog);
-        addComponent(clearServerLog);
+
+        buttons.addComponent(startButton);
+        buttons.addComponent(stopButton);
+        buttons.addComponent(clearServerLog);
+
 
         textArea = new TextArea();
         textArea.setWidth("100%");
-        textArea.setRows(25);
+        textArea.setRows(10);
+
+        addComponent(buttons);
         addComponent(textArea);
     }
 

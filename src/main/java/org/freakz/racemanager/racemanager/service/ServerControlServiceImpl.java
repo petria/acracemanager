@@ -1,6 +1,7 @@
 package org.freakz.racemanager.racemanager.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
 import org.freakz.racemanager.racemanager.ui.Broadcaster;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,19 @@ public class ServerControlServiceImpl implements ServerControlService {
         timer.schedule(new MyTimer(), 5000L);
     }
 
+    private ServerStartupPaths getStartUpPaths() {
+        ServerStartupPaths model = new ServerStartupPaths();
+        model.setServerDirectory("C:\\cygwin64\\home\\airiope\\own\\code\\server");
+        model.setServerCommand("C:\\cygwin64\\home\\airiope\\own\\code\\server\\acServer.exe");
+        return model;
+    }
 
     @Override
     public void startServer(String id) {
         log.debug("Started: {}", id);
         try {
-            runner = new ProcessRunner(this);
-            runner.startProcess("C:\\cygwin64\\home\\airiope\\own\\code\\server", "C:\\cygwin64\\home\\airiope\\own\\code\\server\\acServer.exe");
+            runner = new ProcessRunnerImpl(this);
+            runner.startServer(getStartUpPaths());
 
         } catch (Exception e) {
             e.printStackTrace();
