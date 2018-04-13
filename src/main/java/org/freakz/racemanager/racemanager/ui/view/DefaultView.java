@@ -15,20 +15,12 @@ public class DefaultView extends VerticalLayout implements View {
 
     private TextArea textArea;
 
-    private Label testLabel;
-
     @PostConstruct
     void init() {
-        addComponent(new Label("This is the default view"));
+        addComponent(new Label("Start/Stop acServer"));
         textArea = new TextArea();
-//        textArea.setEnabled(false);
-
-        testLabel = new Label("fufufuf");
-        addComponent(testLabel);
-        ;
-
-        textArea.setRows(40);
-        textArea.setValue("fufufufufuff\ndfufufufuf\n");
+        textArea.setWidth("100%");
+        textArea.setRows(25);
         addComponent(textArea);
 
     }
@@ -41,10 +33,12 @@ public class DefaultView extends VerticalLayout implements View {
     public void setTextArea(String text) {
         final String value = textArea.getValue();
         //Label.markAsDirty();
-        textArea.setValue(text);
+        String allText = textArea.getValue();
+        allText += text + "\n";
+        textArea.setValue(allText);
+        //        textArea.setCursorPosition(allText.length());
+        textArea.setCursorPosition(textArea.getValue().length());
 
-        testLabel.setValue(text);
-        final String value1 = textArea.getValue();
         int foo = 0;
     }
 

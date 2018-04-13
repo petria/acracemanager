@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.ui.Broadcaster;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 @Service
@@ -26,7 +27,7 @@ public class ServerControlServiceImpl implements ServerControlService {
 
     private void handleTimer() {
         log.debug("Timer!");
-        Broadcaster.broadcast(new Date().toString());
+        //       Broadcaster.broadcast(new Date().toString());
         timer.schedule(new MyTimer(), 5000L);
         if (runner != null) {
             runner.isAlive();

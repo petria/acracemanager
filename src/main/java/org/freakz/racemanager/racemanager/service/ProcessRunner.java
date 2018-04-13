@@ -47,11 +47,14 @@ public class ProcessRunner {
         timer.schedule(new MyTask(), 10L);
     }
 
-    private void handleMyTaskRun() throws IOException, InterruptedException {
+    private void handleMyTaskRun() throws IOException {
         log.debug("Starting %s in %s", command, workDir);
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(new File(workDir));
         process = pb.start();
+
+        broadCastLine(">>> Started: " + command);
+
         process.getOutputStream();
         BufferedReader br;
         String inputEncoding = "UTF-8";
@@ -66,6 +69,7 @@ public class ProcessRunner {
             }
         }
         process.destroyForcibly();
+        broadCastLine(">>> Stopped: " + command);
         log.debug("{} ended", command);
     }
 

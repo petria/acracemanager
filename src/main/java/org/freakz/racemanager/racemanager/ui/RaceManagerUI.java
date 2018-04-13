@@ -37,8 +37,6 @@ public class RaceManagerUI extends UI implements ViewDisplay, Broadcaster.Broadc
 
     private Panel panel;
 
-    private Label test;
-
     @Override
     protected void init(VaadinRequest request) {
         root = new VerticalLayout();
@@ -51,8 +49,7 @@ public class RaceManagerUI extends UI implements ViewDisplay, Broadcaster.Broadc
                 StartServerView.VIEW_NAME));
 
         root.addComponent(navigationBar);*/
-        test = new Label("Server control panel");
-        root.addComponent(test);
+
         Button startButton = new Button("Start server");
         startButton.addClickListener(this::handleStart);
         root.addComponent(startButton);
@@ -107,15 +104,8 @@ public class RaceManagerUI extends UI implements ViewDisplay, Broadcaster.Broadc
     @Override
     public void receiveBroadcast(final String message) {
         access(() -> {
-/*            StartServerView view = (StartServerView) viewProvider.getView(StartServerView.VIEW_NAME);
-            view.addLine(message);*/
-/*            UIScopedView uiScopedView = (UIScopedView)
-            uiScopedView.setDateLabel(message);*/
-   //         root.addComponent(new Label(message));
-            final DefaultView view = (DefaultView) viewProvider.getView("");
+            DefaultView view = (DefaultView) getNavigator().getCurrentView();
             view.setTextArea(message);
-            test.setValue(message);
-
         });
     }
 
