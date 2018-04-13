@@ -3,7 +3,7 @@ package org.freakz.racemanager.racemanager.ui.view;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 
@@ -17,12 +17,19 @@ public class DefaultView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("Start/Stop acServer"));
+        Button clearConsole = new Button("Clear log");
+        clearConsole.addClickListener(this::handleClearButton);
+        addComponent(clearConsole);
+
         textArea = new TextArea();
         textArea.setWidth("100%");
         textArea.setRows(25);
         addComponent(textArea);
 
+    }
+
+    private void handleClearButton(Button.ClickEvent clickEvent) {
+        textArea.setValue("");
     }
 
     @Override
@@ -35,10 +42,14 @@ public class DefaultView extends VerticalLayout implements View {
         //Label.markAsDirty();
         String allText = textArea.getValue();
         allText += text + "\n";
-        textArea.setValue(allText);
+        //        textArea.setValue(allText);
         //        textArea.setCursorPosition(allText.length());
-        textArea.setCursorPosition(textArea.getValue().length());
-
+        //        textArea.setCursorPosition(textArea.getValue().length());
+        textArea.setReadOnly(false);
+        textArea.setValue(allText);
+        textArea.setReadOnly(true);
+        textArea.setCursorPosition(Integer.MAX_VALUE);
+        //        textArea.setSelectionRange(textArea.getValue().length()-1, 1);
         int foo = 0;
     }
 
