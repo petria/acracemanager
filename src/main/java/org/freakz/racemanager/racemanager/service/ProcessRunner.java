@@ -6,8 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,7 +17,6 @@ public class ProcessRunner {
     private String command;
     private boolean doRun;
     private Process process;
-    private List<String> stdoutLines = new ArrayList<>();
 
     public ProcessRunner(ServerControlServiceImpl serverControlService) {
         this.serverControlService = serverControlService;
@@ -33,11 +30,10 @@ public class ProcessRunner {
                 doRun = true;
                 handleMyTaskRun();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("MyTask runner failed!", e);
             }
         }
     }
-
 
     private Timer timer = new Timer();
 
@@ -47,14 +43,14 @@ public class ProcessRunner {
         timer.schedule(new MyTask(), 10L);
     }
 
-    private void handleMyTaskRun() throws IOException {
+    private void handleMyTaskRun() throws IOException, InterruptedException {
         log.debug("Starting %s in %s", command, workDir);
-        ProcessBuilder pb = new ProcessBuilder(command);
-        pb.directory(new File(workDir));
-        process = pb.start();
 
         broadCastLine(">>> Started: " + command);
 
+        ProcessBuilder pb = new ProcessBuilder(command);
+        pb.directory(new File(workDir));
+        process = pb.start();
         process.getOutputStream();
         BufferedReader br;
         String inputEncoding = "UTF-8";
@@ -63,13 +59,15 @@ public class ProcessRunner {
             doRun = process.isAlive();
             if (doRun) {
                 String line = br.readLine();
-                broadCastLine(line);
-//                stdoutLines.add(line);
-                log.debug("server: {}", line);
+                if (line != null) {
+                    broadCastLine(line);
+                    log.debug("server: {}", line);
+                }
             }
         }
         process.destroyForcibly();
         broadCastLine(">>> Stopped: " + command);
+
         log.debug("{} ended", command);
     }
 
