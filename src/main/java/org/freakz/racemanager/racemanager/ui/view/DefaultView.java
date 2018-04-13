@@ -2,7 +2,6 @@ package org.freakz.racemanager.racemanager.ui.view;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
@@ -41,14 +40,10 @@ public class DefaultView extends VerticalLayout implements View {
 
     public void setTextArea(String text) {
         final String value = textArea.getValue();
-
-        VaadinSession.getCurrent().lock();
         //Label.markAsDirty();
         textArea.setValue(text);
 
         testLabel.setValue(text);
-        textArea.markAsDirty();
-        VaadinSession.getCurrent().unlock();
         final String value1 = textArea.getValue();
         int foo = 0;
     }

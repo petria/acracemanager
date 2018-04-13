@@ -115,7 +115,7 @@ public class RaceManagerUI extends UI implements ViewDisplay, Broadcaster.Broadc
             final DefaultView view = (DefaultView) viewProvider.getView("");
             view.setTextArea(message);
             test.setValue(message);
-            push();
+
         });
     }
 
