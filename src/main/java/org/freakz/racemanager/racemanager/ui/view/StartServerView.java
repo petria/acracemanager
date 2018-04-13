@@ -22,8 +22,6 @@ public class StartServerView extends VerticalLayout implements View {
 
     private TextArea textArea;
 
-    private VerticalLayout panelContent;
-
     @PostConstruct
     void init() {
         addComponent(new Label("Server control panel"));
@@ -35,12 +33,18 @@ public class StartServerView extends VerticalLayout implements View {
         stopButton.addClickListener(this::handleStop);
         addComponent(stopButton);
 
+        Button clearServerLog = new Button("Clear log");
+        clearServerLog.addClickListener(this::handleClearLog);
+        addComponent(clearServerLog);
+
         textArea = new TextArea();
         textArea.setWidth("100%");
         textArea.setRows(25);
         addComponent(textArea);
+    }
 
-        addComponent(textArea);
+    private void handleClearLog(Button.ClickEvent clickEvent) {
+        textArea.setValue("");
     }
 
     private void handleStop(Button.ClickEvent clickEvent) {
