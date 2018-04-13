@@ -16,15 +16,22 @@ public class DefaultView extends VerticalLayout implements View {
 
     private TextArea textArea;
 
+    private Label testLabel;
+
     @PostConstruct
     void init() {
         addComponent(new Label("This is the default view"));
         textArea = new TextArea();
 //        textArea.setEnabled(false);
 
+        testLabel = new Label("fufufuf");
+        addComponent(testLabel);
+        ;
+
         textArea.setRows(40);
         textArea.setValue("fufufufufuff\ndfufufufuf\n");
         addComponent(textArea);
+
     }
 
     @Override
@@ -39,6 +46,7 @@ public class DefaultView extends VerticalLayout implements View {
         //Label.markAsDirty();
         textArea.setValue(text);
 
+        testLabel.setValue(text);
         textArea.markAsDirty();
         VaadinSession.getCurrent().unlock();
         final String value1 = textArea.getValue();
