@@ -1,0 +1,11 @@
+/target/
+.classpath
+.project
+/.settings/
+build.properties
+/META-INF/
+/osgi/
+plugin.xml
+.idea/
+*.iml
+*/target/
