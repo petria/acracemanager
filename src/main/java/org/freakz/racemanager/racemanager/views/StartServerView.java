@@ -4,7 +4,12 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
 import org.freakz.racemanager.racemanager.Sections;
 import org.freakz.racemanager.racemanager.UIStateManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +35,9 @@ public class StartServerView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
+        VerticalLayout tab1 = new VerticalLayout();
 
-        addComponent(new Label("Server control panel"));
+        tab1.addComponent(new Label("Server control panel"));
 
         HorizontalLayout buttons = new HorizontalLayout();
 
@@ -40,6 +46,7 @@ public class StartServerView extends VerticalLayout implements View {
 
         Button stopButton = new Button("Stop server");
         stopButton.addClickListener(this::handleStop);
+        stopButton.setEnabled(false);
 
         Button clearServerLog = new Button("Clear log");
         clearServerLog.addClickListener(this::handleClearLog);
@@ -53,8 +60,16 @@ public class StartServerView extends VerticalLayout implements View {
         textArea.setWidth("100%");
         textArea.setRows(10);
 
-        addComponent(buttons);
-        addComponent(textArea);
+        tab1.addComponent(buttons);
+        tab1.addComponent(textArea);
+
+        TabSheet tabSheet = new TabSheet();
+        addComponent(tabSheet);
+
+        tab1.setCaption("airiot.fi #1");
+        tabSheet.addTab(tab1);
+
+
     }
 
     private void handleClearLog(Button.ClickEvent clickEvent) {

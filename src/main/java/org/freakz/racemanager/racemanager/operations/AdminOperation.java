@@ -15,10 +15,10 @@
  */
 package org.freakz.racemanager.racemanager.operations;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import org.freakz.racemanager.racemanager.Sections;
-import org.freakz.racemanager.racemanager.backend.MyBackend;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 /**
@@ -29,15 +29,8 @@ import org.vaadin.spring.sidebar.annotation.SideBarItem;
  */
 @SpringComponent
 @SideBarItem(sectionId = Sections.OPERATIONS, caption = "Admin operation", order = 1)
-//@FontAwesomeIcon(FontAwesome.WRENCH)
+@FontAwesomeIcon(FontAwesome.WRENCH)
 public class AdminOperation implements Runnable {
-
-    private final MyBackend backend;
-
-    @Autowired
-    public AdminOperation(MyBackend backend) {
-        this.backend = backend;
-    }
 
     @Override
     public void run() {

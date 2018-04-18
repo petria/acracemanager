@@ -23,7 +23,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
 import org.freakz.racemanager.racemanager.Sections;
-import org.freakz.racemanager.racemanager.backend.MyBackend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
@@ -40,17 +39,11 @@ import org.vaadin.spring.sidebar.annotation.SideBarItem;
 @FontAwesomeIcon(FontAwesome.COGS)
 public class AdminView extends CustomComponent implements View {
 
-    private final MyBackend backend;
 
     @Autowired
-    public AdminView(MyBackend backend) {
-        this.backend = backend;
-        Button button = new Button("Call admin backend", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Notification.show(AdminView.this.backend.adminOnlyEcho("Hello Admin World!"));
-            }
-        });
+    public AdminView() {
+
+        Button button = new Button("Call admin backend", (Button.ClickListener) event -> Notification.show("Hello Admin World!"));
         setCompositionRoot(button);
     }
 
