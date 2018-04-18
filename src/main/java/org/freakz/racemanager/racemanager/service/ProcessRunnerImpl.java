@@ -95,9 +95,12 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
     @Override
     public boolean isAlive() {
-        boolean alive = process.isAlive();
-        log.debug("alive: {}", alive);
-        return alive;
+        if (process != null) {
+            boolean alive = process.isAlive();
+            log.debug("alive: {}", alive);
+            return alive;
+        }
+        return false;
     }
 
 }

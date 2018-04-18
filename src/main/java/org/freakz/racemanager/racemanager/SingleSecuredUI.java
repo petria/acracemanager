@@ -59,7 +59,7 @@ public class SingleSecuredUI extends UI implements Broadcaster.BroadcastListener
 
     @Override
     protected void init(VaadinRequest request) {
-        getPage().setTitle("Vaadin Managed Security Demo");
+        getPage().setTitle("Assetto Corsa Race Manager");
         // Let's register a custom error handler to make the 'access denied' messages a bit friendlier.
         setErrorHandler(new DefaultErrorHandler() {
             @Override

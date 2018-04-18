@@ -23,7 +23,6 @@ import javax.annotation.PostConstruct;
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Start Server")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
-
 public class StartServerView extends VerticalLayout implements View {
 
     public static final String VIEW_NAME = "StartServer";

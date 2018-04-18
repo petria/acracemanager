@@ -28,9 +28,7 @@ import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 /**
- * When the user logs in and there is no view to navigate to, this view will be shown.
- *
- * @author Petter Holmström (petter@vaadin.com)
+ * Default view
  */
 @SpringView(name = "")
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Home", order = 0)
@@ -41,14 +39,11 @@ public class HomeView extends VerticalLayout implements View {
         setSpacing(true);
         setMargin(true);
 
-        Label header = new Label("Welcome to the Vaadin Managed Security Demo!");
+        Label header = new Label("Welcome to the Assetto Corsa Race Manager!");
         header.addStyleName(ValoTheme.LABEL_H1);
         addComponent(header);
 
-        Label body = new Label("<p>This application demonstrate how a Vaadin application can take care of security itself while still integrating with Spring Security.</p>" +
-                "<p>Please try it out by clicking and navigating around as different users. You can log in as <em>user/user</em> or <em>admin/admin</em>. Some of the protected " +
-                "features are hidden from the UI when you cannot access them, others are visible all the time.</p>" +
-                "<p>Also note that since we are using web socket based push, we do not have access to cookies and therefore cannot use Remember Me services.</p>");
+        Label body = new Label("<p>Assetto Corsa Race Manager</p>");
         body.setContentMode(ContentMode.HTML);
         addComponent(body);
     }
