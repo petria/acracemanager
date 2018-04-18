@@ -35,9 +35,9 @@ public class StartServerView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        VerticalLayout tab1 = new VerticalLayout();
+        addComponent(new Label("Server control panel"));
 
-        tab1.addComponent(new Label("Server control panel"));
+        VerticalLayout tab1 = new VerticalLayout();
 
         HorizontalLayout buttons = new HorizontalLayout();
 
@@ -67,7 +67,7 @@ public class StartServerView extends VerticalLayout implements View {
         addComponent(tabSheet);
 
         tab1.setCaption("airiot.fi #1");
-        tabSheet.addTab(tab1);
+        tabSheet.addTab(tab1).setIcon(FontAwesome.SERVER);
 
 
     }
