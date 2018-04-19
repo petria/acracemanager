@@ -82,7 +82,9 @@ public class Application {
             auth.inMemoryAuthentication()
                     .withUser("user").password("user").roles("USER")
                     .and()
-                    .withUser("admin").password("admin").roles("ADMIN");
+                    .withUser("admin").password("admin").roles("ADMIN")
+                    .and()
+                    .withUser("a").password("a").roles("ADMIN");
         }
     }
 

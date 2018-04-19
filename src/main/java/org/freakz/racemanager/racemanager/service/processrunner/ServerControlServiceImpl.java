@@ -53,7 +53,7 @@ public class ServerControlServiceImpl implements ServerControlService {
         model.setServerCommand("C:\\AC\\server\\acServer.exe");
 
         model.setStrackerDirectory("C:\\AC\\stracker");
-        model.setServerCommand("start-stracker.cmd");
+        model.setStrackerCommand("start-stracker.cmd");
 
         return model;
     }
@@ -64,7 +64,7 @@ public class ServerControlServiceImpl implements ServerControlService {
         model.setServerCommand("/home/petria/AC3/server/acServer");
 
         model.setStrackerDirectory("/home/petria/AC3/stracker");
-        model.setServerCommand("start-stracker.sh");
+        model.setStrackerCommand("start-stracker.sh");
 
         return model;
     }
