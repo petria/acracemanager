@@ -37,10 +37,6 @@ import org.vaadin.spring.security.util.SecurityExceptionUtils;
 import org.vaadin.spring.security.util.SuccessfulLoginEvent;
 
 /**
- * Main application UI that shows either the {@link org.vaadin.spring.samples.security.managed.MainScreen} or the {@link org.vaadin.spring.samples.security.managed.LoginScreen},
- * depending on whether there is an authenticated user or not. Also note that the UI is using web socket based push.
- *
- * @author Petter Holmström (petter@vaadin.com)
  */
 @SpringUI
 @Theme(ValoTheme.THEME_NAME)
@@ -138,7 +134,7 @@ public class SingleSecuredUI extends UI implements Broadcaster.BroadcastListener
             final View currentView = getNavigator().getCurrentView();
             if (currentView instanceof StartServerView) {
                 StartServerView startServerView = (StartServerView) currentView;
-                startServerView.addLine(event.getMessage());
+                startServerView.addLineToServerConsole(event.getServerId(), event.getMessage());
             }
         }
 

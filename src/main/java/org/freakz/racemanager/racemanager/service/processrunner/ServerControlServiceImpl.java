@@ -37,8 +37,8 @@ public class ServerControlServiceImpl implements ServerControlService {
     }
 
     @Override
-    public void serverLineAddedToStdout(String line) {
-        Broadcaster.broadcast(getServerConsoleLogEvent(line, "id"));
+    public void serverLineAddedToStdout(String serverId, String line) {
+        Broadcaster.broadcast(getServerConsoleLogEvent(line, serverId));
     }
 
     public ServerControlServiceImpl() {
@@ -70,10 +70,10 @@ public class ServerControlServiceImpl implements ServerControlService {
     }
 
     @Override
-    public void startServer(String id) {
-        log.debug("Started: {}", id);
+    public void startServer(String serverId) {
+        log.debug("Started: {}", serverId);
         try {
-            runner = new ProcessRunnerImpl(this);
+            runner = new ProcessRunnerImpl(serverId, this);
             if (hostOS == HostOS.LINUX) {
                 log.debug("Starting Linux server");
                 runner.startServer(getStartUpPathsLinux());

@@ -8,7 +8,7 @@ public interface ServerControlService {
 
     String serverStatus(String id);
 
-    void serverLineAddedToStdout(String line);
+    void serverLineAddedToStdout(String serverId, String line);
 
     void startStracker(String id);
 

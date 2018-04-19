@@ -23,11 +23,13 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
     private Process process;
 
+    private String serverId;
 
     final private Timer timer = new Timer();
 
-    public ProcessRunnerImpl(ServerControlServiceImpl serverControlService) {
+    public ProcessRunnerImpl(String serverId, ServerControlServiceImpl serverControlService) {
         this.serverControlService = serverControlService;
+        this.serverId = serverId;
     }
 
     private class MyTask extends TimerTask {
@@ -84,7 +86,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
     }
 
     private void broadCastLine(String line) {
-        serverControlService.serverLineAddedToStdout(line);
+        serverControlService.serverLineAddedToStdout(serverId, line);
     }
 
     @Override

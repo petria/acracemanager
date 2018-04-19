@@ -14,15 +14,19 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     private TextArea strackerTextArea;
 
-    public ServerAndStrackerView(UIStateManager uiStateManager) {
+    private final String serverId;
+
+    public ServerAndStrackerView(UIStateManager uiStateManager, String serverId) {
+
         this.uiStateManager = uiStateManager;
+        this.serverId = serverId;
 
         Button startServerButton = new Button("Start server");
         startServerButton.addClickListener(this::handleServerStart);
 
         Button stopServerButton = new Button("Stop server");
         stopServerButton.addClickListener(this::handleServerStop);
-        stopServerButton.setEnabled(false);
+//        stopServerButton.setEnabled(false);
 
         Button clearServerLog = new Button("Clear log");
         clearServerLog.addClickListener(this::handleServerClearLog);
@@ -84,6 +88,25 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     private void handleServerStart(Button.ClickEvent clickEvent) {
         uiStateManager.startServer();
+    }
+
+    public void addLineToStrackerConsole(String text) {
+        String allText = strackerTextArea.getValue();
+        allText += text + "\n";
+        strackerTextArea.setReadOnly(false);
+        strackerTextArea.setValue(allText);
+        strackerTextArea.setReadOnly(true);
+        strackerTextArea.setCursorPosition(Integer.MAX_VALUE);
+
+    }
+
+    public void addLineToServerConsole(String text) {
+        String allText = serverTextArea.getValue();
+        allText += text + "\n";
+        serverTextArea.setReadOnly(false);
+        serverTextArea.setValue(allText);
+        serverTextArea.setReadOnly(true);
+        serverTextArea.setCursorPosition(Integer.MAX_VALUE);
     }
 
 }

@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.Sections;
 import org.freakz.racemanager.racemanager.UIStateManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,14 @@ import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringView(name = StartServerView.VIEW_NAME)
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Start Server")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
+@Slf4j
 public class StartServerView extends VerticalLayout implements View {
 
     public static final String VIEW_NAME = "StartServer";
@@ -27,47 +31,24 @@ public class StartServerView extends VerticalLayout implements View {
     @Autowired
     private UIStateManager uiStateManager;
 
+    private final Map<String, ServerAndStrackerView> serverIdToViewMap = new HashMap<>();
+
     @PostConstruct
     void init() {
         addComponent(new Label("Server control panel"));
 
-/*        VerticalLayout tab1 = new VerticalLayout();
-
-        HorizontalLayout buttons = new HorizontalLayout();
-
-        Button startServerButton = new Button("Start server");
-        startServerButton.addClickListener(this::handleStart);
-
-        Button stopServerButton = new Button("Stop server");
-        stopServerButton.addClickListener(this::handleStop);
-        stopServerButton.setEnabled(false);
-
-        Button clearServerLog = new Button("Clear log");
-        clearServerLog.addClickListener(this::handleClearLog);
-
-        buttons.addComponent(startServerButton);
-        buttons.addComponent(stopServerButton);
-        buttons.addComponent(clearServerLog);
-
-
-        serverTextArea = new TextArea();
-        serverTextArea.setWidth("100%");
-        serverTextArea.setRows(10);
-
-
-
-        tab1.addComponent(buttons);
-        tab1.addComponent(serverTextArea);
-
-*/
         TabSheet tabSheet = new TabSheet();
         addComponent(tabSheet);
 
-        VerticalLayout tab1 = new ServerAndStrackerView(uiStateManager);
-        tab1.setCaption("airiot.fi #1");
+        VerticalLayout tab1 = createServerTab("airiot.fi");
         tabSheet.addTab(tab1).setIcon(FontAwesome.SERVER);
+    }
 
-
+    private VerticalLayout createServerTab(String serverId) {
+        ServerAndStrackerView view = new ServerAndStrackerView(uiStateManager, serverId);
+        view.setCaption(serverId);
+        serverIdToViewMap.put(serverId, view);
+        return view;
     }
 
 
@@ -76,13 +57,22 @@ public class StartServerView extends VerticalLayout implements View {
         // This view is constructed in the init() method()
     }
 
-    public void addLine(String text) {
-/*        String allText = serverTextArea.getValue();
-        allText += text + "\n";
-        serverTextArea.setReadOnly(false);
-        serverTextArea.setValue(allText);
-        serverTextArea.setReadOnly(true);
-        serverTextArea.setCursorPosition(Integer.MAX_VALUE);*/
+    public void addLineToStrackerConsole(String serverId, String text) {
+        ServerAndStrackerView view = serverIdToViewMap.get(serverId);
+        if (view != null) {
+            view.addLineToStrackerConsole(text);
+        } else {
+            log.error("No view: {}", serverId);
+        }
+    }
+
+    public void addLineToServerConsole(String serverId, String text) {
+        ServerAndStrackerView view = serverIdToViewMap.get(serverId);
+        if (view != null) {
+            view.addLineToServerConsole(text);
+        } else {
+            log.error("No view: {}", serverId);
+        }
     }
 
 }
