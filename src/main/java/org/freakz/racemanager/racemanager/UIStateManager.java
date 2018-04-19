@@ -7,4 +7,8 @@ public interface UIStateManager {
 
     void stopServer();
 
+    void startStracker();
+
+    void stopStracker();
+
 }

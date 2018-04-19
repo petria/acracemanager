@@ -4,11 +4,8 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import org.freakz.racemanager.racemanager.Sections;
 import org.freakz.racemanager.racemanager.UIStateManager;
@@ -30,58 +27,49 @@ public class StartServerView extends VerticalLayout implements View {
     @Autowired
     private UIStateManager uiStateManager;
 
-    private TextArea textArea;
-
     @PostConstruct
     void init() {
         addComponent(new Label("Server control panel"));
 
-        VerticalLayout tab1 = new VerticalLayout();
+/*        VerticalLayout tab1 = new VerticalLayout();
 
         HorizontalLayout buttons = new HorizontalLayout();
 
-        Button startButton = new Button("Start server");
-        startButton.addClickListener(this::handleStart);
+        Button startServerButton = new Button("Start server");
+        startServerButton.addClickListener(this::handleStart);
 
-        Button stopButton = new Button("Stop server");
-        stopButton.addClickListener(this::handleStop);
-        stopButton.setEnabled(false);
+        Button stopServerButton = new Button("Stop server");
+        stopServerButton.addClickListener(this::handleStop);
+        stopServerButton.setEnabled(false);
 
         Button clearServerLog = new Button("Clear log");
         clearServerLog.addClickListener(this::handleClearLog);
 
-        buttons.addComponent(startButton);
-        buttons.addComponent(stopButton);
+        buttons.addComponent(startServerButton);
+        buttons.addComponent(stopServerButton);
         buttons.addComponent(clearServerLog);
 
 
-        textArea = new TextArea();
-        textArea.setWidth("100%");
-        textArea.setRows(10);
+        serverTextArea = new TextArea();
+        serverTextArea.setWidth("100%");
+        serverTextArea.setRows(10);
+
+
 
         tab1.addComponent(buttons);
-        tab1.addComponent(textArea);
+        tab1.addComponent(serverTextArea);
 
+*/
         TabSheet tabSheet = new TabSheet();
         addComponent(tabSheet);
 
+        VerticalLayout tab1 = new ServerAndStrackerView(uiStateManager);
         tab1.setCaption("airiot.fi #1");
         tabSheet.addTab(tab1).setIcon(FontAwesome.SERVER);
 
 
     }
 
-    private void handleClearLog(Button.ClickEvent clickEvent) {
-        textArea.setValue("");
-    }
-
-    private void handleStop(Button.ClickEvent clickEvent) {
-        uiStateManager.stopServer();
-    }
-
-    private void handleStart(Button.ClickEvent clickEvent) {
-        uiStateManager.startServer();
-    }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -89,12 +77,12 @@ public class StartServerView extends VerticalLayout implements View {
     }
 
     public void addLine(String text) {
-        String allText = textArea.getValue();
+/*        String allText = serverTextArea.getValue();
         allText += text + "\n";
-        textArea.setReadOnly(false);
-        textArea.setValue(allText);
-        textArea.setReadOnly(true);
-        textArea.setCursorPosition(Integer.MAX_VALUE);
+        serverTextArea.setReadOnly(false);
+        serverTextArea.setValue(allText);
+        serverTextArea.setReadOnly(true);
+        serverTextArea.setCursorPosition(Integer.MAX_VALUE);*/
     }
 
 }

@@ -1,4 +1,4 @@
-package org.freakz.racemanager.racemanager.service;
+package org.freakz.racemanager.racemanager.service.processrunner;
 
 import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
@@ -84,7 +84,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
     }
 
     private void broadCastLine(String line) {
-        serverControlService.lineAddedToStdout(line);
+        serverControlService.serverLineAddedToStdout(line);
     }
 
     @Override
