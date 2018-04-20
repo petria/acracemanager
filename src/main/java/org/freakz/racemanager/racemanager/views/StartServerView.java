@@ -75,4 +75,15 @@ public class StartServerView extends VerticalLayout implements View {
         }
     }
 
+    public void serverAlive(String serverId, String alive) {
+        ServerAndStrackerView view = serverIdToViewMap.get(serverId);
+        if (view != null) {
+            view.serverAlive(alive);
+        } else {
+            log.error("No view: {}", serverId);
+        }
+
+    }
+
+
 }

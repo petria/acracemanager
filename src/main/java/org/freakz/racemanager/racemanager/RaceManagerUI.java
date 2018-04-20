@@ -42,7 +42,7 @@ import org.vaadin.spring.security.util.SuccessfulLoginEvent;
 @Theme(ValoTheme.THEME_NAME)
 @Push
 @Slf4j
-public class SingleSecuredUI extends UI implements Broadcaster.BroadcastListener {
+public class RaceManagerUI extends UI implements Broadcaster.BroadcastListener {
 
     @Autowired
     ApplicationContext applicationContext;
@@ -56,7 +56,6 @@ public class SingleSecuredUI extends UI implements Broadcaster.BroadcastListener
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("Assetto Corsa Race Manager");
-        // Let's register a custom error handler to make the 'access denied' messages a bit friendlier.
         setErrorHandler(new DefaultErrorHandler() {
             @Override
             public void error(com.vaadin.server.ErrorEvent event) {
@@ -116,16 +115,29 @@ public class SingleSecuredUI extends UI implements Broadcaster.BroadcastListener
     }
 
     public void receiveBroadcast(final PushEvent event) {
-        //   SecurityContextHolder.getContext().getAuthentication()
         access(() -> {
             switch (event.getType()) {
                 case SERVER_CONSOLE_LOG:
                     handleServerLogEvent(event);
                     break;
+                case SERVER_ALIVE:
+                    handleServerAliveEvent(event);
+                    break;
                 default:
                     log.error("Not implemented: {}", event.getType());
             }
         });
+    }
+
+    private void handleServerAliveEvent(PushEvent event) {
+        final Navigator navigator = getNavigator();
+        if (navigator != null) {
+            final View currentView = getNavigator().getCurrentView();
+            if (currentView instanceof StartServerView) {
+                StartServerView startServerView = (StartServerView) currentView;
+                startServerView.serverAlive(event.getServerId(), event.getMessage());
+            }
+        }
     }
 
     private void handleServerLogEvent(PushEvent event) {

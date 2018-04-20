@@ -5,11 +5,16 @@ import java.io.Serializable;
 public class PushEvent implements Serializable {
 
     public enum Type {
-        SERVER_CONSOLE_LOG
+        SERVER_CONSOLE_LOG,
+        SERVER_ALIVE
     }
 
     public static PushEvent getServerConsoleLogEvent(String message, String serverId) {
         return new PushEvent(Type.SERVER_CONSOLE_LOG).setMessage(message).setServerId(serverId);
+    }
+
+    public static PushEvent getServerAliveEvent(String message, String serverId) {
+        return new PushEvent(Type.SERVER_ALIVE).setMessage(message).setServerId(serverId);
     }
 
     public PushEvent(Type type) {

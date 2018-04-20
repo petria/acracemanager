@@ -36,7 +36,6 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
         @Override
         public void run() {
-
             try {
                 doRun = true;
                 handleMyTaskRun();
@@ -64,8 +63,10 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.directory(new File(workDir));
+
         process = pb.start();
         process.getOutputStream();
+
         BufferedReader br;
         String inputEncoding = "UTF-8";
         br = new BufferedReader(new InputStreamReader(process.getInputStream(), inputEncoding));

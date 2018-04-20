@@ -7,19 +7,33 @@ import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
 import org.freakz.racemanager.racemanager.util.HostOsDetector;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.freakz.racemanager.racemanager.events.PushEvent.getServerAliveEvent;
 import static org.freakz.racemanager.racemanager.events.PushEvent.getServerConsoleLogEvent;
 
 @Service
 @Slf4j
 public class ServerControlServiceImpl implements ServerControlService {
 
-    private Timer timer = new Timer();
-    private ProcessRunner runner;
+    class ProcessRunnerNode {
 
+        ProcessRunner runner;
+
+        String serverId;
+
+        ProcessRunnerNode(String serverId) {
+            this.serverId = serverId;
+        }
+    }
+
+    private Timer timer = new Timer();
     private final HostOS hostOS;
+
+    private final Map<String, ProcessRunnerNode> processRunnerNodeMap = new HashMap<>();
 
     private class MyTimer extends  TimerTask {
 
@@ -31,8 +45,12 @@ public class ServerControlServiceImpl implements ServerControlService {
 
     private void handleTimer() {
         timer.schedule(new MyTimer(), 5000L);
-        if (runner != null) {
-            runner.isAlive();
+        for (ProcessRunnerNode node : processRunnerNodeMap.values()) {
+            if (node.runner == null) {
+                Broadcaster.broadcast(getServerAliveEvent("<not alive>", node.serverId));
+            } else {
+                Broadcaster.broadcast(getServerAliveEvent("alive: " + node.runner.isAlive(), node.serverId));
+            }
         }
     }
 
@@ -69,17 +87,28 @@ public class ServerControlServiceImpl implements ServerControlService {
         return model;
     }
 
+    private ProcessRunnerNode getProcessRunnerNode(String serverId) {
+        ProcessRunnerNode node = processRunnerNodeMap.get(serverId);
+        if (node == null) {
+            node = new ProcessRunnerNode(serverId);
+            processRunnerNodeMap.put(serverId, node);
+        }
+        return node;
+    }
+
     @Override
     public void startServer(String serverId) {
+        ProcessRunnerNode node = getProcessRunnerNode(serverId);
+
         log.debug("Started: {}", serverId);
         try {
-            runner = new ProcessRunnerImpl(serverId, this);
+            node.runner = new ProcessRunnerImpl(serverId, this);
             if (hostOS == HostOS.LINUX) {
                 log.debug("Starting Linux server");
-                runner.startServer(getStartUpPathsLinux());
+                node.runner.startServer(getStartUpPathsLinux());
             } else if (hostOS == HostOS.WINDOWS) {
                 log.debug("Starting Windows server");
-                runner.startServer(getStartUpPathsWindows());
+                node.runner.startServer(getStartUpPathsWindows());
             } else {
                 log.error("OS not supported: {}", hostOS);
             }
@@ -90,16 +119,21 @@ public class ServerControlServiceImpl implements ServerControlService {
     }
 
     @Override
-    public void stopServer(String id) {
-        if (runner != null) {
-            runner.stopProcess();
-            runner = null;
+    public void stopServer(String serverId) {
+        ProcessRunnerNode node = getProcessRunnerNode(serverId);
+        if (node.runner != null) {
+            node.runner.stopProcess();
+            node.runner = null;
         }
     }
 
     @Override
-    public String serverStatus(String id) {
-        return null;
+    public String serverStatus(String serverId) {
+        ProcessRunnerNode node = getProcessRunnerNode(serverId);
+        if (node.runner == null) {
+            return "<not running>";
+        }
+        return "alive: " + node.runner.isAlive();
     }
 
     @Override

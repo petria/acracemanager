@@ -2,10 +2,13 @@ package org.freakz.racemanager.racemanager.views;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
+import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.UIStateManager;
 
+@Slf4j
 public class ServerAndStrackerView extends VerticalLayout {
 
     private final UIStateManager uiStateManager;
@@ -16,10 +19,14 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     private final String serverId;
 
+    private final Label aLiveLabel;
+
     public ServerAndStrackerView(UIStateManager uiStateManager, String serverId) {
 
         this.uiStateManager = uiStateManager;
         this.serverId = serverId;
+
+        aLiveLabel = new Label("Alive: ");
 
         Button startServerButton = new Button("Start server");
         startServerButton.addClickListener(this::handleServerStart);
@@ -58,6 +65,7 @@ public class ServerAndStrackerView extends VerticalLayout {
         strackerTextArea.setWidth("100%");
         strackerTextArea.setRows(10);
 
+        addComponent(aLiveLabel);
         addComponent(serverControlButtons);
         addComponent(serverTextArea);
 
@@ -91,22 +99,25 @@ public class ServerAndStrackerView extends VerticalLayout {
     }
 
     public void addLineToStrackerConsole(String text) {
-        String allText = strackerTextArea.getValue();
+        addLineToTextArea(strackerTextArea, text);
+    }
+
+    private void addLineToTextArea(TextArea textArea, String text) {
+        String allText = textArea.getValue();
         allText += text + "\n";
-        strackerTextArea.setReadOnly(false);
-        strackerTextArea.setValue(allText);
-        strackerTextArea.setReadOnly(true);
-        strackerTextArea.setCursorPosition(Integer.MAX_VALUE);
+        textArea.setReadOnly(false);
+        textArea.setValue(allText);
+        textArea.setReadOnly(true);
+        textArea.setCursorPosition(Integer.MAX_VALUE);
 
     }
 
     public void addLineToServerConsole(String text) {
-        String allText = serverTextArea.getValue();
-        allText += text + "\n";
-        serverTextArea.setReadOnly(false);
-        serverTextArea.setValue(allText);
-        serverTextArea.setReadOnly(true);
-        serverTextArea.setCursorPosition(Integer.MAX_VALUE);
+        addLineToTextArea(serverTextArea, text);
     }
 
+    public void serverAlive(String alive) {
+        aLiveLabel.setValue("Alive: " + alive);
+        log.debug("Server alive!");
+    }
 }
