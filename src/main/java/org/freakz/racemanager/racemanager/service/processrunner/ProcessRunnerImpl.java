@@ -57,7 +57,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
         timer.schedule(new MyTask(), 10L);
     }
 
-    private void handleMyTaskRun() throws IOException, InterruptedException {
+    private void handleMyTaskRun() throws IOException {
         log.debug("Starting %s in %s", command, workDir);
 
         broadCastLine(">>> Started: " + command);
