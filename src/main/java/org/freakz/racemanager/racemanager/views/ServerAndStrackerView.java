@@ -1,10 +1,6 @@
 package org.freakz.racemanager.racemanager.views;
 
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.UIStateManager;
 
@@ -79,11 +75,11 @@ public class ServerAndStrackerView extends VerticalLayout {
     }
 
     private void handleStopStracker(Button.ClickEvent clickEvent) {
-        uiStateManager.startStracker();
+        uiStateManager.stopStracker();
     }
 
     private void handleStartStracker(Button.ClickEvent clickEvent) {
-        uiStateManager.stopStracker();
+        uiStateManager.startStracker();
     }
 
     private void handleServerClearLog(Button.ClickEvent clickEvent) {

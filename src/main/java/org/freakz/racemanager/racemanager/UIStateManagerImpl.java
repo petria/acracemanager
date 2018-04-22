@@ -26,11 +26,13 @@ public class UIStateManagerImpl implements UIStateManager {
 
     @Override
     public void startStracker() {
+        log.debug("Handle start Stracker");
         serverControlService.startStracker("airiot.fi");
     }
 
     @Override
     public void stopStracker() {
+        log.debug("Handle stop Stracker");
         serverControlService.stopStracker("airiot.fi");
     }
 }

@@ -1,6 +1,7 @@
 package org.freakz.racemanager.racemanager.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ServerStartupPaths implements Serializable {
 
@@ -8,9 +9,13 @@ public class ServerStartupPaths implements Serializable {
 
     private String serverCommand;
 
+    private List<String> serverCommands;
+
     private String strackerDirectory;
 
     private String strackerCommand;
+
+//    private List<String> serverCommands;
 
     public String getServerDirectory() {
         return serverDirectory;

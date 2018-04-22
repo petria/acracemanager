@@ -6,11 +6,16 @@ public class PushEvent implements Serializable {
 
     public enum Type {
         SERVER_CONSOLE_LOG,
+        STRACKER_CONSOLE_LOG,
         SERVER_ALIVE
     }
 
     public static PushEvent getServerConsoleLogEvent(String message, String serverId) {
         return new PushEvent(Type.SERVER_CONSOLE_LOG).setMessage(message).setServerId(serverId);
+    }
+
+    public static PushEvent getStrackerConsoleLogEvent(String message, String serverId) {
+        return new PushEvent(Type.STRACKER_CONSOLE_LOG).setMessage(message).setServerId(serverId);
     }
 
     public static PushEvent getServerAliveEvent(String message, String serverId) {

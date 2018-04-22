@@ -120,13 +120,27 @@ public class RaceManagerUI extends UI implements Broadcaster.BroadcastListener {
                 case SERVER_CONSOLE_LOG:
                     handleServerLogEvent(event);
                     break;
+                case STRACKER_CONSOLE_LOG:
+                    handleStrackerLogEvent(event);
+                    break;
                 case SERVER_ALIVE:
-                    handleServerAliveEvent(event);
+//                    handleServerAliveEvent(event);
                     break;
                 default:
                     log.error("Not implemented: {}", event.getType());
             }
         });
+    }
+
+    private void handleStrackerLogEvent(PushEvent event) {
+        final Navigator navigator = getNavigator();
+        if (navigator != null) {
+            final View currentView = getNavigator().getCurrentView();
+            if (currentView instanceof StartServerView) {
+                StartServerView startServerView = (StartServerView) currentView;
+                startServerView.addLineToStrackerConsole(event.getServerId(), event.getMessage());
+            }
+        }
     }
 
     private void handleServerAliveEvent(PushEvent event) {

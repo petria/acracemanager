@@ -13,6 +13,17 @@ import java.util.TimerTask;
 @Slf4j
 public class ProcessRunnerImpl implements ProcessRunner {
 
+
+    public enum ProcessType {
+        SERVER,
+        STRACKER
+    }
+
+
+    private final String serverId;
+
+    private final ProcessType processType;
+
     private final ServerControlServiceImpl serverControlService;
 
     private String workDir;
@@ -23,13 +34,12 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
     private Process process;
 
-    private String serverId;
-
     final private Timer timer = new Timer();
 
-    public ProcessRunnerImpl(String serverId, ServerControlServiceImpl serverControlService) {
-        this.serverControlService = serverControlService;
+    public ProcessRunnerImpl(String serverId, ProcessType processType, ServerControlServiceImpl serverControlService) {
         this.serverId = serverId;
+        this.processType = processType;
+        this.serverControlService = serverControlService;
     }
 
     private class MyTask extends TimerTask {
@@ -40,14 +50,20 @@ public class ProcessRunnerImpl implements ProcessRunner {
                 doRun = true;
                 handleMyTaskRun();
             } catch (Exception e) {
-                log.error("MyTask runner failed!", e);
+                log.error("MyTask serverRunner failed!", e);
             }
         }
     }
 
     @Override
-    public void startServer(ServerStartupPaths model) {
-        doStartProcess(model.getServerDirectory(), model.getServerCommand());
+    public void startProcess(ServerStartupPaths model) {
+        if (processType == ProcessType.SERVER) {
+            doStartProcess(model.getServerDirectory(), model.getServerCommand());
+        } else if (processType == ProcessType.STRACKER) {
+            doStartProcess(model.getStrackerDirectory(), model.getStrackerCommand());
+        } else {
+            log.error("Unknown type?!");
+        }
     }
 
     private void doStartProcess(String workDir, String command) {
@@ -57,11 +73,12 @@ public class ProcessRunnerImpl implements ProcessRunner {
     }
 
     private void handleMyTaskRun() throws IOException {
-        log.debug("Starting %s in %s", command, workDir);
+        log.debug("Starting {} in {}", command, workDir);
 
         broadCastLine(">>> Started: " + command);
 
-        ProcessBuilder pb = new ProcessBuilder(command);
+        ProcessBuilder pb = new ProcessBuilder(command.split(" "));
+//        pb.command()
         pb.directory(new File(workDir));
 
         process = pb.start();
@@ -76,7 +93,6 @@ public class ProcessRunnerImpl implements ProcessRunner {
                 String line = br.readLine();
                 if (line != null) {
                     broadCastLine(line);
-                    log.debug("server: {}", line);
                 }
             }
         }
@@ -87,12 +103,20 @@ public class ProcessRunnerImpl implements ProcessRunner {
     }
 
     private void broadCastLine(String line) {
-        serverControlService.serverLineAddedToStdout(serverId, line);
+        log.debug("{} :: {} >> {}", serverId, processType, line);
+        serverControlService.handleProcessOutput(serverId, processType, line);
     }
 
     @Override
     public void stopProcess() {
-        process.destroyForcibly();
+        if (process != null) {
+            try {
+                process.destroyForcibly().waitFor();
+                log.debug("Destroyed: {} -- {}", serverId, processType);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         this.doRun = false;
     }
 
@@ -100,7 +124,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
     public boolean isAlive() {
         if (process != null) {
             boolean alive = process.isAlive();
-            log.debug("alive: {}", alive);
+            log.debug("{} -- {} - alive: {}", serverId, processType, alive);
             return alive;
         }
         return false;
