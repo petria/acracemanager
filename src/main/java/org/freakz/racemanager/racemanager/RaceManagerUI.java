@@ -25,9 +25,10 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
-import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.events.PushEvent;
 import org.freakz.racemanager.racemanager.views.StartServerView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.vaadin.spring.events.EventBus;
@@ -41,8 +42,9 @@ import org.vaadin.spring.security.util.SuccessfulLoginEvent;
 @SpringUI
 @Theme(ValoTheme.THEME_NAME)
 @Push
-@Slf4j
 public class RaceManagerUI extends UI implements Broadcaster.BroadcastListener {
+
+    Logger log = LoggerFactory.getLogger(RaceManagerUI.class);
 
     @Autowired
     ApplicationContext applicationContext;

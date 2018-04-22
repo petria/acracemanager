@@ -1,11 +1,14 @@
 package org.freakz.racemanager.racemanager.views;
 
 import com.vaadin.ui.*;
-import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.UIStateManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
+
 public class ServerAndStrackerView extends VerticalLayout {
+
+    Logger log = LoggerFactory.getLogger(ServerAndStrackerView.class);
 
     private final UIStateManager uiStateManager;
 

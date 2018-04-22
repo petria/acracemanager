@@ -7,9 +7,10 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
-import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.Sections;
 import org.freakz.racemanager.racemanager.UIStateManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
@@ -23,8 +24,9 @@ import java.util.Map;
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Start Server")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
-@Slf4j
 public class StartServerView extends VerticalLayout implements View {
+
+    Logger log = LoggerFactory.getLogger(StartServerView.class);
 
     public static final String VIEW_NAME = "StartServer";
 

@@ -1,13 +1,11 @@
 package org.freakz.racemanager.racemanager.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.freakz.racemanager.racemanager.model.HostOS;
 import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
 import org.freakz.racemanager.racemanager.util.HostOsDetector;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 public class ServerConfigManagerImpl implements ServerConfigManager {
 
     private final HostOS hostOS;

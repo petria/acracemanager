@@ -1,10 +1,12 @@
 package org.freakz.racemanager.racemanager.service.processrunner;
 
-import lombok.extern.slf4j.Slf4j;
+
 import org.freakz.racemanager.racemanager.Broadcaster;
 import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
 import org.freakz.racemanager.racemanager.service.ServerConfigManager;
 import org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +21,10 @@ import static org.freakz.racemanager.racemanager.service.processrunner.ProcessRu
 import static org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType.STRACKER;
 
 @Service
-@Slf4j
+
 public class ServerControlServiceImpl implements ServerControlService {
+
+    Logger log = LoggerFactory.getLogger(ServerControlServiceImpl.class);
 
     class ProcessRunnerNode {
 
