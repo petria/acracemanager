@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Stream;
 
 
 public class ProcessRunnerImpl implements ProcessRunner {
@@ -35,7 +36,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
     private boolean doRun;
 
-    private Process process;
+    private java.lang.Process process;
 
     final private Timer timer = new Timer();
 
@@ -45,7 +46,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
         this.serverControlService = serverControlService;
     }
 
-    private class MyTask extends TimerTask {
+    private class Process extends TimerTask {
 
         @Override
         public void run() {
@@ -53,7 +54,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
                 doRun = true;
                 handleMyTaskRun();
             } catch (Exception e) {
-                log.error("MyTask serverRunner failed!", e);
+                log.error("Process serverRunner failed!", e);
             }
         }
     }
@@ -72,19 +73,20 @@ public class ProcessRunnerImpl implements ProcessRunner {
     private void doStartProcess(String workDir, String command) {
         this.workDir = workDir;
         this.command = command;
-        timer.schedule(new MyTask(), 10L);
+        timer.schedule(new Process(), 10L);
     }
 
     private void handleMyTaskRun() throws IOException {
         log.debug("Starting {} in {}", command, workDir);
 
-        broadCastLine(">>> Started: " + command);
 
         ProcessBuilder pb = new ProcessBuilder(command.split(" "));
-//        pb.command()
         pb.directory(new File(workDir));
 
         process = pb.start();
+        ProcessHandle processHandle = process.toHandle();
+        broadCastLine(">>> Started: " + command + " PID: " + processHandle.pid());
+
         process.getOutputStream();
 
         BufferedReader br;
@@ -113,12 +115,14 @@ public class ProcessRunnerImpl implements ProcessRunner {
     @Override
     public void stopProcess() {
         if (process != null) {
-            try {
-                process.destroyForcibly().waitFor();
-                log.debug("Destroyed: {} -- {}", serverId, processType);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ProcessHandle processHandle = process.toHandle();
+            long pid = processHandle.pid();
+            Stream<ProcessHandle> children = processHandle.children();
+            children.forEach(ProcessHandle::destroyForcibly);
+
+            log.debug("Destroying PID: {} ", pid);
+            processHandle.destroyForcibly();
+            log.debug("Destroyed: {} -- {}", serverId, processType);
         }
         this.doRun = false;
     }
