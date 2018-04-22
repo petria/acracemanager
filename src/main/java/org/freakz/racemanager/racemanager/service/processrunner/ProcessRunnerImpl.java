@@ -120,6 +120,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
             Stream<ProcessHandle> children = processHandle.children();
             children.forEach(child -> {
                 log.debug("Destroy child, PID: {}", child.pid());
+                child.destroyForcibly();
             });
             log.debug("Destroying PID: {} ", pid);
             processHandle.destroyForcibly();
