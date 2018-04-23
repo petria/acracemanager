@@ -13,4 +13,8 @@ public interface ServerConfigManager {
 
     ServerConfigValidation validateServerConfig(ServerConfig serverConfig);
 
+    void setServerConfig(String serverId, ServerConfig serverConfig);
+
+    ServerConfig getServerConfig(String serverId);
+
 }

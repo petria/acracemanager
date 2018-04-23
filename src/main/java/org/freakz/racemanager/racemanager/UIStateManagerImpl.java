@@ -46,11 +46,12 @@ public class UIStateManagerImpl implements UIStateManager {
 
     @Override
     public ServerConfig getServerConfig(String serverId) {
-        // TODO get from service
-        ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setServerId(serverId);
-        serverConfig.setBasePath("C:\\AC\\");
-        return serverConfig;
+        return serverConfigManager.getServerConfig(serverId);
+    }
+
+    @Override
+    public void setServerConfig(String serverId, ServerConfig serverConfig) {
+        serverConfigManager.setServerConfig(serverId, serverConfig);
     }
 
     @Override

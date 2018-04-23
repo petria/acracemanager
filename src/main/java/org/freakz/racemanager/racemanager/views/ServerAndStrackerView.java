@@ -4,15 +4,7 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.ValueChangeMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import org.freakz.racemanager.racemanager.UIStateManager;
 import org.freakz.racemanager.racemanager.model.ServerConfig;
 import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
@@ -37,6 +29,8 @@ public class ServerAndStrackerView extends VerticalLayout {
     private TextField basePath;
 
     private Binder<ServerConfig> binder;
+    private Label currentBasePath;
+    private Label infoLabel;
 
     public ServerAndStrackerView(UIStateManager uiStateManager, String serverId) {
 
@@ -62,16 +56,20 @@ public class ServerAndStrackerView extends VerticalLayout {
     private VerticalLayout createConfigTab() {
         VerticalLayout tab = new VerticalLayout();
 
-        FormLayout layoutWithBinder = new FormLayout();
         binder = new Binder<>();
+        ServerConfig serverConfig = uiStateManager.getServerConfig(serverId);
+        binder.readBean(serverConfig);
+
+        currentBasePath = new Label("Current base path: " + serverConfig.getBasePath());
+
+        FormLayout layoutWithBinder = new FormLayout();
 
         basePath = new TextField("Server and Stracker base path");
         basePath.setValueChangeMode(ValueChangeMode.EAGER);
 
         binder.forField(basePath).bind(ServerConfig::getBasePath, ServerConfig::setBasePath);
-        binder.readBean(uiStateManager.getServerConfig(serverId));
 
-        Label infoLabel = new Label();
+        infoLabel = new Label();
 
         NativeButton validate = new NativeButton("Validate");
         validate.addClickListener(this::handleFormValidate);
@@ -80,19 +78,27 @@ public class ServerAndStrackerView extends VerticalLayout {
 
         layoutWithBinder.addComponent(basePath);
 
-        tab.addComponent(infoLabel);
+        tab.addComponent(currentBasePath);
         tab.addComponent(layoutWithBinder);
         tab.addComponent(buttons);
+        tab.addComponent(infoLabel);
 
         return tab;
     }
 
     private void handleFormValidate(Button.ClickEvent clickEvent) {
-        ServerConfig serverConfig = new ServerConfig(serverId);
+        ServerConfig serverConfig = uiStateManager.getServerConfig(serverId);
         try {
             binder.writeBean(serverConfig);
             log.debug("Validate basePathValue: {}", serverConfig.getBasePath());
             final ServerConfigValidation validation = uiStateManager.validateServerConfig(serverConfig);
+            if (validation.isBasePathOk() && validation.isAcDirectoryOk() && validation.isStrackerDirectoryOk()) {
+                uiStateManager.setServerConfig(serverId, serverConfig);
+                currentBasePath.setValue("Current base path: " + serverConfig.getBasePath());
+                infoLabel.setValue("Path ok!");
+            } else {
+                infoLabel.setValue("Invalid base path!");
+            }
             int foo = 0;
         } catch (ValidationException e) {
             e.printStackTrace();

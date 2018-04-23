@@ -16,4 +16,7 @@ public interface UIStateManager {
     ServerConfig getServerConfig(String serverId);
 
     ServerConfigValidation validateServerConfig(ServerConfig serverConfig);
+
+    void setServerConfig(String serverId, ServerConfig serverConfig);
+
 }

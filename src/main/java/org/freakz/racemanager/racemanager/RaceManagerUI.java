@@ -126,7 +126,7 @@ public class RaceManagerUI extends UI implements Broadcaster.BroadcastListener {
                     handleStrackerLogEvent(event);
                     break;
                 case SERVER_ALIVE:
-//                    handleServerAliveEvent(event);
+                    handleServerAliveEvent(event);
                     break;
                 default:
                     log.error("Not implemented: {}", event.getType());

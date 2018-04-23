@@ -8,11 +8,14 @@ import org.freakz.racemanager.racemanager.util.HostOsDetector;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ServerConfigManagerImpl implements ServerConfigManager {
 
     private final HostOS hostOS;
+    private final Map<String, ServerConfig> serverConfigMap = new HashMap<>();
 
     public ServerConfigManagerImpl() {
         HostOsDetector hostOsDetector = new HostOsDetector();
@@ -74,5 +77,20 @@ public class ServerConfigManagerImpl implements ServerConfigManager {
     private boolean checkIfPathExists(String path) {
         File f = new File(path);
         return f.exists();
+    }
+
+    @Override
+    public void setServerConfig(String serverId, ServerConfig serverConfig) {
+        serverConfigMap.put(serverId, serverConfig);
+    }
+
+    @Override
+    public ServerConfig getServerConfig(String serverId) {
+        ServerConfig serverConfig = serverConfigMap.get(serverId);
+        if (serverConfig == null) {
+            serverConfig = new ServerConfig(serverId);
+            serverConfigMap.put(serverId, serverConfig);
+        }
+        return serverConfig;
     }
 }

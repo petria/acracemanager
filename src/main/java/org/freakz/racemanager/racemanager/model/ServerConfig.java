@@ -10,11 +10,12 @@ public class ServerConfig implements Serializable {
 
     public ServerConfig(String serverId) {
         this.serverId = serverId;
+        this.basePath = "<not_set>";
     }
 
     public ServerConfig() {
-        this.serverId = "";
-        this.basePath = "";
+        this.serverId = "<not_set>";
+        this.basePath = "<not_set>";
     }
 
     public String getServerId() {
