@@ -1,9 +1,13 @@
 package org.freakz.racemanager.racemanager.service;
 
 import org.freakz.racemanager.racemanager.model.HostOS;
+import org.freakz.racemanager.racemanager.model.ServerConfig;
+import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
 import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
 import org.freakz.racemanager.racemanager.util.HostOsDetector;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 
 @Service
 public class ServerConfigManagerImpl implements ServerConfigManager {
@@ -55,4 +59,20 @@ public class ServerConfigManagerImpl implements ServerConfigManager {
         return this.hostOS;
     }
 
+    @Override
+    public ServerConfigValidation validateServerConfig(ServerConfig serverConfig) {
+        ServerConfigValidation validation = new ServerConfigValidation();
+        String basePath = serverConfig.getBasePath();
+
+        validation.setBasePathOk(checkIfPathExists(basePath));
+        validation.setAcDirectoryOk(checkIfPathExists(basePath + "/server/"));
+        validation.setStrackerDirectoryOk(checkIfPathExists(basePath + "/stracker/"));
+
+        return validation;
+    }
+
+    private boolean checkIfPathExists(String path) {
+        File f = new File(path);
+        return f.exists();
+    }
 }

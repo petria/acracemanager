@@ -1,7 +1,21 @@
 package org.freakz.racemanager.racemanager.views;
 
-import com.vaadin.ui.*;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.ValueChangeMode;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import org.freakz.racemanager.racemanager.UIStateManager;
+import org.freakz.racemanager.racemanager.model.ServerConfig;
+import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,12 +32,75 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     private final String serverId;
 
-    private final Label aLiveLabel;
+    private Label aLiveLabel;
+
+    private TextField basePath;
+
+    private Binder<ServerConfig> binder;
 
     public ServerAndStrackerView(UIStateManager uiStateManager, String serverId) {
 
         this.uiStateManager = uiStateManager;
         this.serverId = serverId;
+
+        TabSheet tabSheet = new TabSheet();
+        addComponent(tabSheet);
+
+        VerticalLayout controlsAndLogTab = createControlsTab();
+        controlsAndLogTab.setCaption("Server & Stracker");
+
+        VerticalLayout configTab = createConfigTab();
+        configTab.setCaption("Config");
+
+        tabSheet.addTab(controlsAndLogTab).setIcon(FontAwesome.CAR);
+        tabSheet.addTab(configTab).setIcon(FontAwesome.QUESTION);
+
+        addComponent(tabSheet);
+
+    }
+
+    private VerticalLayout createConfigTab() {
+        VerticalLayout tab = new VerticalLayout();
+
+        FormLayout layoutWithBinder = new FormLayout();
+        binder = new Binder<>();
+
+        basePath = new TextField("Server and Stracker base path");
+        basePath.setValueChangeMode(ValueChangeMode.EAGER);
+
+        binder.forField(basePath).bind(ServerConfig::getBasePath, ServerConfig::setBasePath);
+        binder.readBean(uiStateManager.getServerConfig(serverId));
+
+        Label infoLabel = new Label();
+
+        NativeButton validate = new NativeButton("Validate");
+        validate.addClickListener(this::handleFormValidate);
+        HorizontalLayout buttons = new HorizontalLayout();
+        buttons.addComponent(validate);
+
+        layoutWithBinder.addComponent(basePath);
+
+        tab.addComponent(infoLabel);
+        tab.addComponent(layoutWithBinder);
+        tab.addComponent(buttons);
+
+        return tab;
+    }
+
+    private void handleFormValidate(Button.ClickEvent clickEvent) {
+        ServerConfig serverConfig = new ServerConfig(serverId);
+        try {
+            binder.writeBean(serverConfig);
+            log.debug("Validate basePathValue: {}", serverConfig.getBasePath());
+            final ServerConfigValidation validation = uiStateManager.validateServerConfig(serverConfig);
+            int foo = 0;
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private VerticalLayout createControlsTab() {
+        VerticalLayout tab = new VerticalLayout();
 
         aLiveLabel = new Label("Alive: ");
 
@@ -32,7 +109,6 @@ public class ServerAndStrackerView extends VerticalLayout {
 
         Button stopServerButton = new Button("Stop server");
         stopServerButton.addClickListener(this::handleServerStop);
-//        stopServerButton.setEnabled(false);
 
         Button clearServerLog = new Button("Clear log");
         clearServerLog.addClickListener(this::handleServerClearLog);
@@ -64,13 +140,14 @@ public class ServerAndStrackerView extends VerticalLayout {
         strackerTextArea.setWidth("100%");
         strackerTextArea.setRows(10);
 
-        addComponent(aLiveLabel);
-        addComponent(serverControlButtons);
-        addComponent(serverTextArea);
+        tab.addComponent(aLiveLabel);
+        tab.addComponent(serverControlButtons);
+        tab.addComponent(serverTextArea);
 
-        addComponent(strackerControlButtons);
-        addComponent(strackerTextArea);
+        tab.addComponent(strackerControlButtons);
+        tab.addComponent(strackerTextArea);
 
+        return tab;
     }
 
     private void clearStrackerLog(Button.ClickEvent clickEvent) {

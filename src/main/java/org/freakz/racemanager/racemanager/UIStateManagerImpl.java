@@ -1,5 +1,8 @@
 package org.freakz.racemanager.racemanager;
 
+import org.freakz.racemanager.racemanager.model.ServerConfig;
+import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
+import org.freakz.racemanager.racemanager.service.ServerConfigManager;
 import org.freakz.racemanager.racemanager.service.processrunner.ServerControlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,9 @@ import org.springframework.stereotype.Service;
 public class UIStateManagerImpl implements UIStateManager {
 
     Logger log = LoggerFactory.getLogger(UIStateManagerImpl.class);
+
+    @Autowired
+    private ServerConfigManager serverConfigManager;
 
     @Autowired
     private ServerControlService serverControlService;
@@ -37,4 +43,19 @@ public class UIStateManagerImpl implements UIStateManager {
         log.debug("Handle stop Stracker");
         serverControlService.stopStracker("airiot.fi");
     }
+
+    @Override
+    public ServerConfig getServerConfig(String serverId) {
+        // TODO get from service
+        ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setServerId(serverId);
+        serverConfig.setBasePath("C:\\AC\\");
+        return serverConfig;
+    }
+
+    @Override
+    public ServerConfigValidation validateServerConfig(ServerConfig serverConfig) {
+        return serverConfigManager.validateServerConfig(serverConfig);
+    }
+
 }

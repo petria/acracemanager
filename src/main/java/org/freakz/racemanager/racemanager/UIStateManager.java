@@ -1,7 +1,9 @@
 package org.freakz.racemanager.racemanager;
 
-public interface UIStateManager {
+import org.freakz.racemanager.racemanager.model.ServerConfig;
+import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
 
+public interface UIStateManager {
 
     void startServer();
 
@@ -11,4 +13,7 @@ public interface UIStateManager {
 
     void stopStracker();
 
+    ServerConfig getServerConfig(String serverId);
+
+    ServerConfigValidation validateServerConfig(ServerConfig serverConfig);
 }

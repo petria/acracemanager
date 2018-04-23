@@ -37,7 +37,7 @@ public class StartServerView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("Server control panel"));
+        addComponent(new Label("Servers control panel"));
 
         TabSheet tabSheet = new TabSheet();
         addComponent(tabSheet);

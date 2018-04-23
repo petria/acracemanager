@@ -2,22 +2,16 @@ package org.freakz.racemanager.racemanager.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import org.freakz.racemanager.racemanager.Sections;
-import org.springframework.security.access.annotation.Secured;
-import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
-import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 import javax.annotation.PostConstruct;
 
-@SpringView(name = GeneralConfigView.VIEW_NAME)
+/*@SpringView(name = GeneralConfigView.VIEW_NAME)
 @Secured({"ROLE_ADMIN"})
 @SideBarItem(sectionId = Sections.VIEWS, caption = "General Config")
-@FontAwesomeIcon(FontAwesome.QUESTION)
+@FontAwesomeIcon(FontAwesome.QUESTION)*/
 public class GeneralConfigView extends VerticalLayout implements View {
 
     public static final String VIEW_NAME = "GeneralConfigView";
