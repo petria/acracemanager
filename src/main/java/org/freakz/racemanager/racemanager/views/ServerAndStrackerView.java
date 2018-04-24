@@ -52,10 +52,6 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     }
 
-/*    private void tabChanged(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
-        TabSheet tabSheet = selectedTabChangeEvent.getTabSheet();
-        int foo = 0;
-    }*/
 
     private VerticalLayout createConfigTab() {
         VerticalLayout tab = new VerticalLayout();
@@ -104,7 +100,6 @@ public class ServerAndStrackerView extends VerticalLayout {
             } else {
                 infoLabel.setValue("Invalid base path!");
             }
-            int foo = 0;
         } catch (ValidationException e) {
             e.printStackTrace();
         }

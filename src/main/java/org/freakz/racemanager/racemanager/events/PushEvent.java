@@ -32,6 +32,8 @@ public class PushEvent implements Serializable {
 
     private String serverId;
 
+    private Object pushObject;
+
     public Type getType() {
         return type;
     }
@@ -52,5 +54,13 @@ public class PushEvent implements Serializable {
     public PushEvent setServerId(String serverId) {
         this.serverId = serverId;
         return this;
+    }
+
+    public Object getPushObject() {
+        return pushObject;
+    }
+
+    public void setPushObject(Object pushObject) {
+        this.pushObject = pushObject;
     }
 }
