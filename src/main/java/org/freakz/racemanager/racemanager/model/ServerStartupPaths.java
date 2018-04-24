@@ -1,15 +1,12 @@
 package org.freakz.racemanager.racemanager.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class ServerStartupPaths implements Serializable {
 
     private String serverDirectory;
 
     private String serverCommand;
-
-    private List<String> serverCommands;
 
     private String strackerDirectory;
 

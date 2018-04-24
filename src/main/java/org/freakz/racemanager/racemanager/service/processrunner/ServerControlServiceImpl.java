@@ -69,11 +69,6 @@ public class ServerControlServiceImpl implements ServerControlService {
                 if (node.strackerRunner != null) {
                     node.strackerRunner.isAlive();
                 }
-/*                if (node.serverRunner == null) {
-                    Broadcaster.broadcast(getServerAliveEvent("<not alive>", node.serverId));
-                } else {
-                    Broadcaster.broadcast(getServerAliveEvent("alive: " + node.serverRunner.isAlive(), node.serverId));
-                }*/
             }
         } catch (Exception e) {
             log.error("Timer failed!", e);
@@ -104,7 +99,7 @@ public class ServerControlServiceImpl implements ServerControlService {
     @Override
     public void startServer(String serverId) {
         ProcessRunnerNode node = getProcessRunnerNode(serverId);
-        ServerStartupPaths config = serverConfigManager.getDefaultConfig();
+        ServerStartupPaths config = serverConfigManager.getServerStartupPaths(serverId);
 
         log.debug("Starting acServer: {}", serverId);
         try {

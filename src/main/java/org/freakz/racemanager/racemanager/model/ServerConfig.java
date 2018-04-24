@@ -4,18 +4,20 @@ import java.io.Serializable;
 
 public class ServerConfig implements Serializable {
 
+    public static final String NOT_SET = "<not_set>";
+
     private String serverId;
 
     private String basePath;
 
     public ServerConfig(String serverId) {
         this.serverId = serverId;
-        this.basePath = "<not_set>";
+        this.basePath = NOT_SET;
     }
 
     public ServerConfig() {
-        this.serverId = "<not_set>";
-        this.basePath = "<not_set>";
+        this.serverId = NOT_SET;
+        this.basePath = NOT_SET;
     }
 
     public String getServerId() {

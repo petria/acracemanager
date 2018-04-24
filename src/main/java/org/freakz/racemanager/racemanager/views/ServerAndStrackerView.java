@@ -48,10 +48,14 @@ public class ServerAndStrackerView extends VerticalLayout {
 
         tabSheet.addTab(controlsAndLogTab).setIcon(FontAwesome.CAR);
         tabSheet.addTab(configTab).setIcon(FontAwesome.QUESTION);
-
         addComponent(tabSheet);
 
     }
+
+/*    private void tabChanged(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
+        TabSheet tabSheet = selectedTabChangeEvent.getTabSheet();
+        int foo = 0;
+    }*/
 
     private VerticalLayout createConfigTab() {
         VerticalLayout tab = new VerticalLayout();
@@ -65,6 +69,7 @@ public class ServerAndStrackerView extends VerticalLayout {
         FormLayout layoutWithBinder = new FormLayout();
 
         basePath = new TextField("Server and Stracker base path");
+        basePath.setValue(serverConfig.getBasePath());
         basePath.setValueChangeMode(ValueChangeMode.EAGER);
 
         binder.forField(basePath).bind(ServerConfig::getBasePath, ServerConfig::setBasePath);

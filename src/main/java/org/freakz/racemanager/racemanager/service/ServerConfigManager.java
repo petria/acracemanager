@@ -9,6 +9,8 @@ public interface ServerConfigManager {
 
     ServerStartupPaths getDefaultConfig();
 
+    ServerStartupPaths getServerStartupPaths(String serverId);
+
     HostOS getHostOS();
 
     ServerConfigValidation validateServerConfig(ServerConfig serverConfig);

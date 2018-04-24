@@ -23,7 +23,6 @@ public class ProcessRunnerImpl implements ProcessRunner {
         STRACKER
     }
 
-
     private final String serverId;
 
     private final ProcessType processType;
@@ -103,7 +102,7 @@ public class ProcessRunnerImpl implements ProcessRunner {
         }
         process.destroyForcibly();
         broadCastLine(">>> Stopped: " + command);
-
+        serverControlService.stopServer(serverId);
         log.debug("{} ended", command);
     }
 
