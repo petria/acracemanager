@@ -117,21 +117,25 @@ public class RaceManagerUI extends UI implements Broadcaster.BroadcastListener {
     }
 
     public void receiveBroadcast(final PushEvent event) {
-        access(() -> {
-            switch (event.getType()) {
-                case SERVER_CONSOLE_LOG:
-                    handleServerLogEvent(event);
-                    break;
-                case STRACKER_CONSOLE_LOG:
-                    handleStrackerLogEvent(event);
-                    break;
-                case SERVER_ALIVE:
-                    handleServerAliveEvent(event);
-                    break;
-                default:
-                    log.error("Not implemented: {}", event.getType());
-            }
-        });
+        try {
+            access(() -> {
+                switch (event.getType()) {
+                    case SERVER_CONSOLE_LOG:
+                        handleServerLogEvent(event);
+                        break;
+                    case STRACKER_CONSOLE_LOG:
+                        handleStrackerLogEvent(event);
+                        break;
+                    case PROCESS_STATUS:
+                        handleServerAliveEvent(event);
+                        break;
+                    default:
+                        log.error("Not implemented: {}", event.getType());
+                }
+            });
+        } catch (Exception e) {
+            log.error("error?", e.getMessage());
+        }
     }
 
     private void handleStrackerLogEvent(PushEvent event) {
@@ -151,7 +155,7 @@ public class RaceManagerUI extends UI implements Broadcaster.BroadcastListener {
             final View currentView = getNavigator().getCurrentView();
             if (currentView instanceof StartServerView) {
                 StartServerView startServerView = (StartServerView) currentView;
-                startServerView.serverAlive(event.getServerId(), event.getMessage());
+                startServerView.serverAlive(event.getServerId(), event.getServerAlive(), event.getStrackerAlive());
             }
         }
     }

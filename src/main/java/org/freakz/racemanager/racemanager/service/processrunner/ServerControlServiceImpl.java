@@ -2,6 +2,8 @@ package org.freakz.racemanager.racemanager.service.processrunner;
 
 
 import org.freakz.racemanager.racemanager.Broadcaster;
+import org.freakz.racemanager.racemanager.events.AliveStatus;
+import org.freakz.racemanager.racemanager.events.PushEvent;
 import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
 import org.freakz.racemanager.racemanager.service.ServerConfigManager;
 import org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType;
@@ -15,14 +17,14 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.freakz.racemanager.racemanager.events.PushEvent.getServerConsoleLogEvent;
-import static org.freakz.racemanager.racemanager.events.PushEvent.getStrackerConsoleLogEvent;
+import static org.freakz.racemanager.racemanager.events.PushEvent.*;
 import static org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType.SERVER;
 import static org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType.STRACKER;
 
 @Service
-
 public class ServerControlServiceImpl implements ServerControlService {
+
+    private static final long ALIVE_TIMER_DELAY = 5000L;
 
     Logger log = LoggerFactory.getLogger(ServerControlServiceImpl.class);
 
@@ -39,7 +41,7 @@ public class ServerControlServiceImpl implements ServerControlService {
         }
     }
 
-    private class MyTimer extends  TimerTask {
+    private class MyTimer extends TimerTask {
 
         @Override
         public void run() {
@@ -57,23 +59,31 @@ public class ServerControlServiceImpl implements ServerControlService {
     @Autowired
     public ServerControlServiceImpl(ServerConfigManager serverConfigManager) {
         this.serverConfigManager = serverConfigManager;
-        timer.schedule(new MyTimer(), 5000L);
+        timer.schedule(new MyTimer(), ALIVE_TIMER_DELAY);
     }
 
     private void handleTimer() {
         try {
             for (ProcessRunnerNode node : processRunnerNodeMap.values()) {
+                PushEvent serverAliveEvent = getServerAliveEvent(node.serverId);
+                serverAliveEvent.setServerAlive(AliveStatus.SERVER_NOT_RUNNING);
+                serverAliveEvent.setStrackerAlive(AliveStatus.STRACKER_NOT_RUNNING);
                 if (node.serverRunner != null) {
-                    node.serverRunner.isAlive();
+                    if (node.serverRunner.isAlive()) {
+                        serverAliveEvent.setServerAlive(AliveStatus.SERVER_RUNNING);
+                    }
                 }
                 if (node.strackerRunner != null) {
-                    node.strackerRunner.isAlive();
+                    if (node.strackerRunner.isAlive()) {
+                        serverAliveEvent.setStrackerAlive(AliveStatus.STRACKER_RUNNING);
+                    }
                 }
+                Broadcaster.broadcast(serverAliveEvent);
             }
         } catch (Exception e) {
             log.error("Timer failed!", e);
         } finally {
-            timer.schedule(new MyTimer(), 5000L);
+            timer.schedule(new MyTimer(), ALIVE_TIMER_DELAY);
         }
     }
 
@@ -94,6 +104,11 @@ public class ServerControlServiceImpl implements ServerControlService {
             processRunnerNodeMap.put(serverId, node);
         }
         return node;
+    }
+
+    @Override
+    public void initializeServer(String serverId) {
+        getProcessRunnerNode(serverId);
     }
 
     @Override

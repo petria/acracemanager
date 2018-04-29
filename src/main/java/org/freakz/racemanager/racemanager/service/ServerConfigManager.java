@@ -19,4 +19,6 @@ public interface ServerConfigManager {
 
     ServerConfig getServerConfig(String serverId);
 
+    void loadConfigs();
+
 }

@@ -28,6 +28,10 @@ public class ServerConfigManagerImpl implements ServerConfigManager {
         hostOS = hostOsDetector.detectHostOs();
     }
 
+    public void loadConfigs() {
+        // TODO
+    }
+
 
     private ServerStartupPaths getStartUpPathsWindows() {
         ServerStartupPaths model = new ServerStartupPaths();

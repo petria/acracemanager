@@ -5,13 +5,15 @@ import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
 
 public interface UIStateManager {
 
-    void startServer();
+    void initializeServer(String serverId);
 
-    void stopServer();
+    void startServer(String serverId);
 
-    void startStracker();
+    void stopServer(String serverId);
 
-    void stopStracker();
+    void startStracker(String serverId);
+
+    void stopStracker(String serverId);
 
     ServerConfig getServerConfig(String serverId);
 

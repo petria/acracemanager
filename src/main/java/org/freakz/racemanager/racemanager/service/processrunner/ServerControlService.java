@@ -4,14 +4,15 @@ public interface ServerControlService {
 
     void handleProcessOutput(String serverId, ProcessRunnerImpl.ProcessType processType, String line);
 
-    void startServer(String id);
+    void startServer(String serverId);
 
-    void stopServer(String id);
+    void stopServer(String serverId);
 
-    String serverStatus(String id);
+    String serverStatus(String serverId);
 
-    void startStracker(String id);
+    void startStracker(String serverId);
 
-    void stopStracker(String id);
+    void stopStracker(String serverId);
 
+    void initializeServer(String serverId);
 }

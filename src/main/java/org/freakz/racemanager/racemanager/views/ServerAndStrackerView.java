@@ -6,6 +6,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import org.freakz.racemanager.racemanager.UIStateManager;
+import org.freakz.racemanager.racemanager.events.AliveStatus;
 import org.freakz.racemanager.racemanager.model.ServerConfig;
 import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
 import org.slf4j.Logger;
@@ -24,7 +25,9 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     private final String serverId;
 
-    private Label aLiveLabel;
+    private Label serverAliveLabel;
+
+    private Label strackerAliveLabel;
 
     private TextField basePath;
 
@@ -108,7 +111,7 @@ public class ServerAndStrackerView extends VerticalLayout {
     private VerticalLayout createControlsTab() {
         VerticalLayout tab = new VerticalLayout();
 
-        aLiveLabel = new Label("Alive: ");
+        serverAliveLabel = new Label("Server status: ");
 
         Button startServerButton = new Button("Start server");
         startServerButton.addClickListener(this::handleServerStart);
@@ -123,6 +126,8 @@ public class ServerAndStrackerView extends VerticalLayout {
         serverControlButtons.addComponent(startServerButton);
         serverControlButtons.addComponent(stopServerButton);
         serverControlButtons.addComponent(clearServerLog);
+
+        strackerAliveLabel = new Label("Stracker status: ");
 
         Button startStrackerButton = new Button("Start Stracker");
         startStrackerButton.addClickListener(this::handleStartStracker);
@@ -146,10 +151,11 @@ public class ServerAndStrackerView extends VerticalLayout {
         strackerTextArea.setWidth("100%");
         strackerTextArea.setRows(10);
 
-        tab.addComponent(aLiveLabel);
+        tab.addComponent(serverAliveLabel);
         tab.addComponent(serverControlButtons);
         tab.addComponent(serverTextArea);
 
+        tab.addComponent(strackerAliveLabel);
         tab.addComponent(strackerControlButtons);
         tab.addComponent(strackerTextArea);
 
@@ -161,11 +167,11 @@ public class ServerAndStrackerView extends VerticalLayout {
     }
 
     private void handleStopStracker(Button.ClickEvent clickEvent) {
-        uiStateManager.stopStracker();
+        uiStateManager.stopStracker(serverId);
     }
 
     private void handleStartStracker(Button.ClickEvent clickEvent) {
-        uiStateManager.startStracker();
+        uiStateManager.startStracker(serverId);
     }
 
     private void handleServerClearLog(Button.ClickEvent clickEvent) {
@@ -173,11 +179,11 @@ public class ServerAndStrackerView extends VerticalLayout {
     }
 
     private void handleServerStop(Button.ClickEvent clickEvent) {
-        uiStateManager.stopServer();
+        uiStateManager.stopServer(serverId);
     }
 
     private void handleServerStart(Button.ClickEvent clickEvent) {
-        uiStateManager.startServer();
+        uiStateManager.startServer(serverId);
     }
 
     public void addLineToStrackerConsole(String text) {
@@ -198,8 +204,9 @@ public class ServerAndStrackerView extends VerticalLayout {
         addLineToTextArea(serverTextArea, text);
     }
 
-    public void serverAlive(String alive) {
-        aLiveLabel.setValue("Alive: " + alive);
-        log.debug("Server alive!");
+    public void serverAlive(AliveStatus serverStatus, AliveStatus strackerStatus) {
+        serverAliveLabel.setValue("Server status: " + serverStatus);
+        strackerAliveLabel.setValue("Stracker status: " + strackerStatus);
+//        log.debug("Server alive!");
     }
 }

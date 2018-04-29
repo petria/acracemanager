@@ -21,27 +21,34 @@ public class UIStateManagerImpl implements UIStateManager {
     private ServerControlService serverControlService;
 
     @Override
-    public void startServer() {
+    public void initializeServer(String serverId) {
         log.debug("Handle server start!");
-        serverControlService.startServer("airiot.fi");
+        serverControlService.initializeServer(serverId);
+    }
+
+
+    @Override
+    public void startServer(String serverId) {
+        log.debug("Handle server start!");
+        serverControlService.startServer(serverId);
     }
 
     @Override
-    public void stopServer() {
+    public void stopServer(String serverId) {
         log.debug("Handle server stop!");
-        serverControlService.stopServer("airiot.fi");
+        serverControlService.stopServer(serverId);
     }
 
     @Override
-    public void startStracker() {
+    public void startStracker(String serverId) {
         log.debug("Handle start Stracker");
-        serverControlService.startStracker("airiot.fi");
+        serverControlService.startStracker(serverId);
     }
 
     @Override
-    public void stopStracker() {
+    public void stopStracker(String serverId) {
         log.debug("Handle stop Stracker");
-        serverControlService.stopStracker("airiot.fi");
+        serverControlService.stopStracker(serverId);
     }
 
     @Override

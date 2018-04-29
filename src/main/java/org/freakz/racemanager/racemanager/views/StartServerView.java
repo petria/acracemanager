@@ -9,6 +9,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import org.freakz.racemanager.racemanager.Sections;
 import org.freakz.racemanager.racemanager.UIStateManager;
+import org.freakz.racemanager.racemanager.events.AliveStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,10 @@ public class StartServerView extends VerticalLayout implements View {
         TabSheet tabSheet = new TabSheet();
         addComponent(tabSheet);
 
-        VerticalLayout tab1 = createServerTab("airiot.fi");
+        String serverId = "airiot.fi";
+        VerticalLayout tab1 = createServerTab(serverId);
+//        uiStateManager.initializeServer(serverId);
+
         tabSheet.addTab(tab1).setIcon(FontAwesome.SERVER);
     }
 
@@ -77,15 +81,13 @@ public class StartServerView extends VerticalLayout implements View {
         }
     }
 
-    public void serverAlive(String serverId, String alive) {
+    public void serverAlive(String serverId, AliveStatus serverAlive, AliveStatus strackerAlive) {
         ServerAndStrackerView view = serverIdToViewMap.get(serverId);
         if (view != null) {
-            view.serverAlive(alive);
+            view.serverAlive(serverAlive, strackerAlive);
         } else {
             log.error("No view: {}", serverId);
         }
 
     }
-
-
 }

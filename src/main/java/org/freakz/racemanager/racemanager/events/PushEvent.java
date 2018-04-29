@@ -7,7 +7,8 @@ public class PushEvent implements Serializable {
     public enum Type {
         SERVER_CONSOLE_LOG,
         STRACKER_CONSOLE_LOG,
-        SERVER_ALIVE
+        PROCESS_STATUS,
+
     }
 
     public static PushEvent getServerConsoleLogEvent(String message, String serverId) {
@@ -18,8 +19,8 @@ public class PushEvent implements Serializable {
         return new PushEvent(Type.STRACKER_CONSOLE_LOG).setMessage(message).setServerId(serverId);
     }
 
-    public static PushEvent getServerAliveEvent(String message, String serverId) {
-        return new PushEvent(Type.SERVER_ALIVE).setMessage(message).setServerId(serverId);
+    public static PushEvent getServerAliveEvent(String serverId) {
+        return new PushEvent(Type.PROCESS_STATUS).setServerId(serverId);
     }
 
     public PushEvent(Type type) {
@@ -32,7 +33,9 @@ public class PushEvent implements Serializable {
 
     private String serverId;
 
-    private Object pushObject;
+    private AliveStatus serverAlive;
+
+    private AliveStatus strackerAlive;
 
     public Type getType() {
         return type;
@@ -56,11 +59,19 @@ public class PushEvent implements Serializable {
         return this;
     }
 
-    public Object getPushObject() {
-        return pushObject;
+    public AliveStatus getServerAlive() {
+        return serverAlive;
     }
 
-    public void setPushObject(Object pushObject) {
-        this.pushObject = pushObject;
+    public void setServerAlive(AliveStatus serverAlive) {
+        this.serverAlive = serverAlive;
+    }
+
+    public AliveStatus getStrackerAlive() {
+        return strackerAlive;
+    }
+
+    public void setStrackerAlive(AliveStatus strackerAlive) {
+        this.strackerAlive = strackerAlive;
     }
 }
