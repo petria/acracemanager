@@ -9,6 +9,7 @@ import org.freakz.racemanager.racemanager.UIStateManager;
 import org.freakz.racemanager.racemanager.events.AliveStatus;
 import org.freakz.racemanager.racemanager.model.ServerConfig;
 import org.freakz.racemanager.racemanager.model.ServerConfigValidation;
+import org.freakz.racemanager.racemanager.views.components.AliveBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +26,9 @@ public class ServerAndStrackerView extends VerticalLayout {
 
     private final String serverId;
 
-    private Label serverAliveLabel;
+    private AliveBox serverAliveLabel;
 
-    private Label strackerAliveLabel;
+    private AliveBox strackerAliveLabel;
 
     private TextField basePath;
 
@@ -111,7 +112,7 @@ public class ServerAndStrackerView extends VerticalLayout {
     private VerticalLayout createControlsTab() {
         VerticalLayout tab = new VerticalLayout();
 
-        serverAliveLabel = new Label("Server status: ");
+        serverAliveLabel = new AliveBox(uiStateManager, "Server status: %s"); //new Label("Server status: ");
 
         Button startServerButton = new Button("Start server");
         startServerButton.addClickListener(this::handleServerStart);
@@ -127,7 +128,8 @@ public class ServerAndStrackerView extends VerticalLayout {
         serverControlButtons.addComponent(stopServerButton);
         serverControlButtons.addComponent(clearServerLog);
 
-        strackerAliveLabel = new Label("Stracker status: ");
+//        strackerAliveLabel = new Label("Stracker status: ");
+        strackerAliveLabel = new AliveBox(uiStateManager, "Stracker status: %s");
 
         Button startStrackerButton = new Button("Start Stracker");
         startStrackerButton.addClickListener(this::handleStartStracker);
@@ -205,8 +207,10 @@ public class ServerAndStrackerView extends VerticalLayout {
     }
 
     public void serverAlive(AliveStatus serverStatus, AliveStatus strackerStatus) {
-        serverAliveLabel.setValue("Server status: " + serverStatus);
-        strackerAliveLabel.setValue("Stracker status: " + strackerStatus);
+//        serverAliveLabel.setValue("Server status: " + serverStatus);
+        serverAliveLabel.update(serverStatus.toString());
+        strackerAliveLabel.update(strackerStatus.toString());
+//        strackerAliveLabel.setValue("Stracker status: " + strackerStatus);
 //        log.debug("Server alive!");
     }
 }

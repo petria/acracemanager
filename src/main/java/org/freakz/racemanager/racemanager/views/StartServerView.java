@@ -13,7 +13,6 @@ import org.freakz.racemanager.racemanager.events.AliveStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringView(name = StartServerView.VIEW_NAME)
-@Secured({"ROLE_USER", "ROLE_ADMIN"})
+//@Secured({"ROLE_USER", "ROLE_ADMIN"})
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Start Server")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class StartServerView extends VerticalLayout implements View {
@@ -45,7 +44,7 @@ public class StartServerView extends VerticalLayout implements View {
 
         String serverId = "airiot.fi";
         VerticalLayout tab1 = createServerTab(serverId);
-//        uiStateManager.initializeServer(serverId);
+        uiStateManager.initializeServer(serverId);
 
         tabSheet.addTab(tab1).setIcon(FontAwesome.SERVER);
     }
