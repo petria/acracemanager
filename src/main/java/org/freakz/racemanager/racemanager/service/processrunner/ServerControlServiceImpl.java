@@ -1,7 +1,6 @@
 package org.freakz.racemanager.racemanager.service.processrunner;
 
 
-import org.freakz.racemanager.racemanager.Broadcaster;
 import org.freakz.racemanager.racemanager.events.AliveStatus;
 import org.freakz.racemanager.racemanager.events.PushEvent;
 import org.freakz.racemanager.racemanager.model.ServerStartupPaths;
@@ -17,7 +16,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.freakz.racemanager.racemanager.events.PushEvent.*;
+import static org.freakz.racemanager.racemanager.events.PushEvent.getServerAliveEvent;
 import static org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType.SERVER;
 import static org.freakz.racemanager.racemanager.service.processrunner.ProcessRunnerImpl.ProcessType.STRACKER;
 
@@ -78,7 +77,7 @@ public class ServerControlServiceImpl implements ServerControlService {
                         serverAliveEvent.setStrackerAlive(AliveStatus.STRACKER_RUNNING);
                     }
                 }
-                Broadcaster.broadcast(serverAliveEvent);
+// TODO                Broadcaster.broadcast(serverAliveEvent);
             }
         } catch (Exception e) {
             log.error("Timer failed!", e);
@@ -90,9 +89,9 @@ public class ServerControlServiceImpl implements ServerControlService {
     @Override
     public void handleProcessOutput(String serverId, ProcessType processType, String line) {
         if (processType == SERVER) {
-            Broadcaster.broadcast(getServerConsoleLogEvent(line, serverId));
+// TODO            Broadcaster.broadcast(getServerConsoleLogEvent(line, serverId));
         } else {
-            Broadcaster.broadcast(getStrackerConsoleLogEvent(line, serverId));
+// TODO            Broadcaster.broadcast(getStrackerConsoleLogEvent(line, serverId));
         }
     }
 

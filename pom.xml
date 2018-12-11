@@ -11,73 +11,73 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.12.RELEASE</version>
+        <version>2.1.1.RELEASE</version>
         <relativePath />
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <vaadin.version>8.3.1</vaadin.version>
-        <the.version>2.0.1-SNAPSHOT</the.version>
-        <vaadin-spring.version>2.0.0</vaadin-spring.version>
+        <java.version>11</java.version>
+
+        <wicket.version>8.2.0</wicket.version>
 
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-themes</artifactId>
-            <version>${vaadin.version}</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!--            <version>1.16.20</version> -->
+            <scope>provided</scope>
+        </dependency>
 
+
+        <dependency>
+            <groupId>com.giffing.wicket.spring.boot.starter</groupId>
+            <artifactId>wicket-spring-boot-starter</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-native-websocket-javax</artifactId>
+            <version>${wicket.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client-compiled</artifactId>
-            <version>${vaadin.version}</version>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-spring</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-ioc</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>4.2.4.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.spring.addons</groupId>
-            <artifactId>vaadin-spring-addon-sidebar</artifactId>
-            <version>${the.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-boot</artifactId>
-            <version>${the.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.spring.addons</groupId>
-            <artifactId>vaadin-spring-addon-eventbus</artifactId>
-            <version>${the.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-security</artifactId>
-            <version>${the.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-spring-boot-starter</artifactId>
-            <version>${vaadin-spring.version}</version>
         </dependency>
 
         <dependency>
@@ -86,11 +86,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-push</artifactId>
-            <version>${vaadin.version}</version>
-        </dependency>
 
     </dependencies>
 
@@ -105,10 +100,24 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>10</source>
-                    <target>10</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
     </build>
 </project>

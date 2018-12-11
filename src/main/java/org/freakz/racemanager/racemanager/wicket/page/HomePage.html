@@ -1,0 +1,23 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <title>Wicket!</title>
+</head>
+<body>
+<div class="container">
+
+    <p>
+        Number: <span wicket:id="number_label">X</span>
+    </p>
+    <br><br>
+
+    <span wicket:id="test">Message goes here</span>
+    <br>
+    <form wicket:id="form">
+        <fieldset>
+            <span>Text: </span><input id="textField" type="text" wicket:id="textField"/><br/>
+        </fieldset>
+    </form>
+    <wicket:child/>
+</div>
+</body>
+</html>
